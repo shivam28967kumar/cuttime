@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Shivam Kumar",
+    "email": "shivam@example.com",
+    "password": "$2a$10$1234hashedpasswordabcd",
+    "isVerified": true,
+    "verificationToken": null
+  },
+  {
+    "name": "Unverified User",
+    "email": "testuser@example.com",
+    "password": "$2a$10$5678hashedpasswordefgh",
+    "isVerified": false,
+    "verificationToken": "f3a9a890-1e94-4b94-b8dc-c4d83e769f2b"
+  },
+  {
+    "name": "shivam prajapati",
+    "email": "shivam2867virat@gmail.com",
+    "password": "$2b$10$PImSlI6AnlXcKA6.jcXrn.s.D8Z9CAC5GenHXDooMgHkrEdHhFjBa",
+    "verified": true
+  },
+  {
+    "name": "shivam kumar",
+    "email": "shivam0469719@gmail.com",
+    "password": "$2b$10$hZCQTaVaa6zNC9n9ag6iNeq9OursnGJEQTRdGOUGHHNwb5OdVAX4q",
+    "verified": true
+  }
+]

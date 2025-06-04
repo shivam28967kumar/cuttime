@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard - CutTime</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+      color: #2c3e50;
+    }
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .dashboard {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 10px;
+    }
+    p {
+      margin: 10px 0;
+    }
+    .actions a {
+      display: inline-block;
+      margin: 15px;
+      padding: 12px 24px;
+      background: #27ae60;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .actions a:hover {
+      background: #219150;
+    }
+    footer {
+      text-align: center;
+      background: #2c3e50;
+      color: #ccc;
+      padding: 20px;
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Welcome to CutTime</h1>
+  </header>
+
+  <div class="dashboard">
+    <h2 id="welcome">Welcome!</h2>
+    <p id="emailDisplay"></p>
+
+    <div class="actions">
+      <a href="/bookslot">Book a Slot</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 CutTime. Grooming, without waiting.
+  </footer>
+
+  <script>
+    // Optional: Inject user data using session (can be served from Express as template or API)
+    fetch('/api/user')
+      .then(res => res.json())
+      .then(user => {
+        document.getElementById('welcome').textContent = `Welcome, ${user.name}!`;
+        document.getElementById('emailDisplay').textContent = `Your email: ${user.email}`;
+      })
+      .catch(() => {
+        document.getElementById('welcome').textContent = 'Welcome!';
+      });
+  </script>
+
+</body>
+</html>

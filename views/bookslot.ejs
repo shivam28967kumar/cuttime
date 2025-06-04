@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book Slot - CutTime</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f7f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    label {
+      font-weight: 600;
+      margin-top: 15px;
+      display: block;
+    }
+
+    select,
+    input[type="date"],
+    input[type="time"] {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+
+    button {
+      margin-top: 30px;
+      width: 100%;
+      background-color: #27ae60;
+      color: white;
+      padding: 14px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #219150;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 20px;
+      display: block;
+      text-decoration: none;
+      color: #34495e;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      background: #2c3e50;
+      color: #ccc;
+      padding: 20px;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>CutTime - Book a Slot</h1>
+  </header>
+
+  <div class="container">
+    <h2>Book Your Haircut</h2>
+
+    <form action="/bookslot" method="POST">
+      <label for="salon">Select Salon:</label>
+      <select id="salon" name="salon" required>
+        <option value="">-- Choose a Salon --</option>
+        <option value="Roy Men's Salon">Roy Men's Salon</option>
+        <option value="Style Barbershop">Style Barbershop</option>
+        <option value="Elite Unisex Salon">Elite Unisex Salon</option>
+      </select>
+
+      <label for="date">Choose Date:</label>
+      <input type="date" id="date" name="date" required />
+
+      <label for="time">Choose Time:</label>
+      <input type="time" id="time" name="time" required />
+
+      <button type="submit">Confirm Booking</button>
+    </form>
+
+    <a class="back-link" href="/home">← Back to Home</a>
+  </div>
+
+  <footer>
+    &copy; 2025 CutTime. Your time, your style.
+  </footer>
+
+  <script>
+    // Set default date to today and prevent past dates
+    const dateInput = document.getElementById('date');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+    dateInput.value = today;
+  </script>
+</body>
+
+</html>

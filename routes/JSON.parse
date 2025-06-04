@@ -1,0 +1,11 @@
+let registrations = [];
+
+if (fs.existsSync(filePath)) {
+  try {
+    const fileData = fs.readFileSync(filePath, 'utf8');
+    registrations = fileData.trim() ? JSON.parse(fileData) : [];
+  } catch (err) {
+    console.error('Error reading or parsing JSON:', err);
+    return res.status(500).send('Server error. Try again later.');
+  }
+}

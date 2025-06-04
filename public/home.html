@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CutTime - Book Your Haircut</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #fdfdfd;
+      color: #333;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background: #2c3e50;
+      padding: 20px 0;
+      text-align: center;
+      color: #fff;
+    }
+
+    header h1 {
+      font-size: 2.8em;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: #34495e;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 12px 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    nav a {
+      color: #ecf0f1;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #27ae60;
+    }
+
+    .hero {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+              url('https://images.unsplash.com/photo-1612232307335-068fe74904dc?auto=format&fit=crop&w=1350&q=80') 
+              no-repeat center/cover;
+  color: white;
+  text-align: center;
+  padding: 120px 20px;
+}
+    .hero h2 {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 1.2em;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .section {
+      padding: 60px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .section h3 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    .services,
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      text-align: center;
+    }
+
+    .services div,
+    .steps div {
+      background: #f8f8f8;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .services div:hover,
+    .steps div:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .services h4 i,
+    .steps h4 i {
+      margin-right: 8px;
+      color: #27ae60;
+    }
+
+    .cta {
+      background: #27ae60;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-radius: 10px;
+      margin-top: 40px;
+    }
+
+    .cta a {
+      display: inline-block;
+      margin-top: 20px;
+      background: white;
+      color: #27ae60;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+      border: 2px solid white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .cta a:hover {
+      background: #2ecc71;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      background: linear-gradient(to right, #2c3e50, #34495e);
+      color: #ccc;
+      padding: 30px 20px;
+      margin-top: 60px;
+      font-size: 0.9em;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <header class="animate_animated animate_fadeInDown">
+    <h1>✂ CutTime</h1>
+    <p>Smart Salon Slot Booking</p>
+  </header>
+
+  <nav class="animate_animated animate_fadeInDown">
+    <a href="home.html">Home</a>
+    <a href="register.html">Register</a>
+    <a href="bookslot.html">Book Slot</a>
+    <a href="login.html">Login</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+
+
+  <section class="hero animate_animated animate_zoomIn">
+    <h2>Welcome to CutTime</h2>
+    <h2> No More Waiting in Lines
+    </h2>
+    <p>Say goodbye to long salon waits. Book your haircut online at your preferred salon and time. Fast, simple, and
+      effective.
+
+    </p>
+
+
+    <p>  Save time and enjoy top-notch
+      grooming
+      experiences
+    </p>
+  </section>
+
+  <section class="section">
+    <h3 class="animate_animated animate_fadeInUp">Our Services</h3>
+    <div class="services">
+      <div>
+        <h4><i class="fas fa-cut"></i> Haircut Booking</h4>
+        <p>Reserve your slot at top-rated salons with just a few clicks.</p>
+      </div>
+      <div>
+        <h4><i class="fas fa-clock"></i> Real-Time Scheduling</h4>
+        <p>Choose available time slots and get instant confirmation.</p>
+      </div>
+      <div>
+        <h4><i class="fas fa-bell"></i> Reminders & Alerts</h4>
+        <p>Get notified before your scheduled haircut.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h3 class="animate_animated animate_fadeInUp">How It Works</h3>
+    <div class="steps">
+      <div>
+        <h4><i class="fas fa-user-plus"></i> 1. Register</h4>
+        <p>Create your free CutTime account.</p>
+      </div>
+      <div>
+        <h4><i class="fas fa-store"></i> 2. Select Salon</h4>
+        <p>Choose from a list of verified salons near you.</p>
+      </div>
+      <div>
+        <h4><i class="fas fa-calendar-check"></i> 3. Book Slot</h4>
+        <p>Pick a time, confirm, and walk in without the wait.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:30px;">
+      <h3>Visit Our Salon</h3>
+      <iframe src="https://www.google.com/maps/embed?pb=YOUR_MAP_EMBED_URL" width="100%" height="300" style="border:0;"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </section>
+
+  <section class="section cta animate_animated animate_pulse">
+    <h3>Start Your Hassle-Free Haircut Journey</h3>
+    <a href="register.html">Register Now</a>
+  </section>
+
+  <footer>
+    &copy; 2025 CutTime. Designed with care to save your time.
+  </footer>
+
+</body>
+
+</html>
