@@ -14,7 +14,6 @@ const dashboardRoutes = require('./routes/dashboard');
 const bookingRoutes = require('./routes/bookings');
 const staticRoutes = require('./routes/static');
 
-
 const nodemailer = require('nodemailer');
 
 app.get('/', (req, res) => {
@@ -29,6 +28,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+
 app.post('/contact', async (req, res) => {
   const { name, email, message } = req.body;
   console.log('Contact form submitted:', { name, email, message });
@@ -38,7 +38,6 @@ app.post('/contact', async (req, res) => {
     timeZone: 'Asia/Kolkata'
   });
 
-  // Create transporter
   let transporter = nodemailer.createTransport({
     service: process.env.EMAIL_SERVICE,
     auth: {
@@ -47,7 +46,6 @@ app.post('/contact', async (req, res) => {
     },
   });
 
-  // Email content
   let mailOptions = {
     from: `"${name}" <${email}>`,
     to: process.env.EMAIL_USER,
@@ -59,14 +57,12 @@ app.post('/contact', async (req, res) => {
   try {
     await transporter.sendMail(mailOptions);
     console.log('Email sent successfully!');
-    // Only render the thank you page once
     res.render('thankyou', { name, email, submittedAt });
   } catch (error) {
     console.error('Error sending email:', error);
     res.status(500).send('Oops! Something went wrong. Please try again later.');
   }
 });
-
 
 // Use routes correctly
 app.use(authRoutes);
@@ -92,7 +88,6 @@ app.use((err, req, res, next) => {
     <a href="/">Go to Home</a>
   `);
 });
-
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
