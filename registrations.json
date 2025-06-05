@@ -15,14 +15,8 @@
   },
   {
     "name": "shivam prajapati",
-    "email": "shivam2867virat@gmail.com",
-    "password": "$2b$10$PImSlI6AnlXcKA6.jcXrn.s.D8Z9CAC5GenHXDooMgHkrEdHhFjBa",
-    "verified": true
-  },
-  {
-    "name": "shivam kumar",
     "email": "shivam0469719@gmail.com",
-    "password": "$2b$10$hZCQTaVaa6zNC9n9ag6iNeq9OursnGJEQTRdGOUGHHNwb5OdVAX4q",
+    "password": "$2b$10$lWvAEf84Ncjxz12U6UgaGuM6DSMA9vjImNeuQOJxS5u9Qyhvs9K4i",
     "verified": true
-  }
+  } 
 ]

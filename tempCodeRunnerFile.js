@@ -47,7 +47,7 @@ app.use(session({
 
 app.post('/contact', async (req, res) => {
   const { name, email, message } = req.body;
-  // console.log('Contact form submitted:', { name, email, message });
+  console.log('Contact form submitted:', { name, email, message });
   const submittedAt = new Date().toLocaleString('en-IN', {
     dateStyle: 'medium',
     timeStyle: 'short',

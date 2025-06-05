@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Verify OTP - CutTime</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --bg: #f9fafb;
+      --text: #111827;
+      --card: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111827;
+        --text: #f9fafb;
+        --card: #1f2937;
+        --shadow: rgba(255, 255, 255, 0.05);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .otp-container {
+      background: var(--card);
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px var(--shadow);
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    p {
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .email-highlight {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    input[type="number"] {
+      padding: 0.75rem;
+      width: 100%;
+      font-size: 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      text-align: center;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+    }
+
+    button {
+      padding: 0.7rem 2rem;
+      font-size: 1rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover:enabled {
+      background-color: var(--primary-dark);
+    }
+
+    button:disabled {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .cooldown {
+      font-size: 0.85rem;
+      color: #ef4444;
+      margin-top: 0.5rem;
+    }
+
+    .note, .extra-links {
+      font-size: 0.85rem;
+      margin-top: 1rem;
+      color: #9ca3af;
+    }
+
+    .extra-links a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .extra-links a:hover {
+      text-decoration: underline;
+    }
+
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .success {
+      color: #10b981;
+      font-size: 2rem;
+      margin-top: 1.5rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="otp-container" id="otpBox">
+    <h2>Email Verification</h2>
+    <p>Enter the 6-digit code sent to <span class="email-highlight"><%= email %></span></p>
+
+    <form id="otpForm" action="/verify-otp" method="POST" onsubmit="return showSpinner()">
+      <input type="hidden" name="email" value="<%= email %>" />
+      <input type="number" name="otp" placeholder="Enter OTP" required maxlength="6" autofocus />
+      <button type="submit" id="submitBtn">
+        <span id="btnText">Verify OTP</span>
+        <span id="spinner" class="spinner" style="display:none;"></span>
+      </button>
+    </form>
+
+    <form action="/resend-otp" method="POST" id="resendForm">
+      <input type="hidden" name="email" value="<%= email %>" />
+      <button type="submit" id="resendBtn" disabled>Resend OTP</button>
+      <div class="cooldown" id="cooldownText">You can resend in 60 seconds</div>
+    </form>
+
+    <div class="note">Didn’t get the code? It may take a few minutes or check your spam folder.</div>
+    <div class="extra-links">
+      <p><a href="/register">Register again</a> • <a href="/home">← Back to Home</a></p>
+    </div>
+
+    <div class="success" id="successMessage">✅ Verified!</div>
+  </div>
+
+  <script>
+    let cooldown = 60;
+    const resendBtn = document.getElementById('resendBtn');
+    const cooldownText = document.getElementById('cooldownText');
+
+    const timer = setInterval(() => {
+      cooldown--;
+      cooldownText.textContent = `You can resend in ${cooldown} second${cooldown !== 1 ? 's' : ''}`;
+      if (cooldown <= 0) {
+        clearInterval(timer);
+        resendBtn.disabled = false;
+        cooldownText.textContent = '';
+      }
+    }, 1000);
+
+    function showSpinner() {
+      document.getElementById('btnText').style.display = 'none';
+      document.getElementById('spinner').style.display = 'inline-block';
+
+      // Optional: simulate success after 1s
+      setTimeout(() => {
+        document.getElementById('otpForm').style.display = 'none';
+        document.getElementById('resendForm').style.display = 'none';
+        document.getElementById('successMessage').style.display = 'block';
+      }, 1000);
+
+      return true; // allow form submission
+    }
+  </script>
+</body>
+</html>

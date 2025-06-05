@@ -1,35 +1,30 @@
-const nodemailer = require('nodemailer');
+// utils/mailer.js
 require('dotenv').config();
+const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  service: 'Gmail', // or use 'Outlook', 'Yahoo', etc. based on your email
+  service: process.env.EMAIL_SERVICE || 'Gmail',
   auth: {
-    user: process.env.EMAIL_USER,       // Your email address
-    pass: process.env.EMAIL_PASS        // App password or email password
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
 });
 
-async function sendVerificationEmail(email, token) {
-  const verificationUrl = `http://localhost:3000/verify?token=${token}`;
-
+async function sendOtpEmail(email, otp) {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: 'Verify your email - CutTime',
-    html: `
-      <h2>Verify Your Email</h2>
-      <p>Please click the link below to verify your email:</p>
-      <a href="${verificationUrl}">${verificationUrl}</a>
-      <p>If you did not request this, you can ignore this email.</p>
-    `
+    subject: 'Your OTP Code - CutTime',
+    text: `Your OTP is ${otp}. It will expire in 5 minutes.`,
   };
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log(`Verification email sent to ${email}`);
+    //console.log(`OTP email sent to ${email}`);
   } catch (err) {
-    console.error('Error sending verification email:', err);
+    console.error('Error sending OTP email:', err);
   }
 }
 
-module.exports = { sendVerificationEmail };
+module.exports = { sendOtpEmail };
+
