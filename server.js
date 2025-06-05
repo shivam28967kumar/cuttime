@@ -104,6 +104,18 @@ app.use((err, req, res, next) => {
     <a href="/">Go to Home</a>
   `);
 });
+// const session = require('express-session');
+const MongoStore = require('connect-mongo');
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI, // your MongoDB connection string
+  })
+}));
+
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
