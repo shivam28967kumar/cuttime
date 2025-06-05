@@ -2,31 +2,35 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const nodemailer = require('nodemailer');
-const app = express();
-const PORT = process.env.PORT || 3000;
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-// server.js
+const MongoStore = require('connect-mongo');
 const bodyParser = require('body-parser');
+const nodemailer = require('nodemailer');
 const fs = require('fs');
 
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// View engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Middleware
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Session
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
+}));
 
-// Temporary in-memory OTP store
+// Temporary OTP store
 const otpStore = new Map();
 
-// Nodemailer setup (use your real credentials or ethereal for testing)
-const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: 'your-email@gmail.com',
-    pass: 'your-app-password'
-  }
-});
-
-// Import routes correctly
+// Routes
 const authRoutes = require('./routes/auth');
 const dashboardRoutes = require('./routes/dashboard');
 const bookingRoutes = require('./routes/bookings');
@@ -36,14 +40,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'home.html'));
 });
 
-// Middleware
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({ extended: true }));
-
-
 app.post('/contact', async (req, res) => {
   const { name, email, message } = req.body;
-  // console.log('Contact form submitted:', { name, email, message });
   const submittedAt = new Date().toLocaleString('en-IN', {
     dateStyle: 'medium',
     timeStyle: 'short',
@@ -62,8 +60,7 @@ app.post('/contact', async (req, res) => {
     from: `"${name}" <${email}>`,
     to: process.env.EMAIL_USER,
     subject: `New Contact Form Message from ${name}`,
-    text: `You received a new message from your website contact form.\n\n` +
-          `Name: ${name}\nEmail: ${email}\nMessage:\n${message}`,
+    text: `You received a new message:\n\nName: ${name}\nEmail: ${email}\nMessage:\n${message}`,
   };
 
   try {
@@ -72,46 +69,34 @@ app.post('/contact', async (req, res) => {
     res.render('thankyou', { name, email, submittedAt });
   } catch (error) {
     console.error('Error sending email:', error);
-    res.status(500).send('Oops! Something went wrong. Please try again later.');
+    res.status(500).send('Something went wrong. Try again later.');
   }
 });
 
-// Use routes correctly
+// Route usage
 app.use(authRoutes);
-app.use(dashboardRoutes.router); // if exported as { router }
+app.use(dashboardRoutes.router); // if exported with `{ router }`
 app.use(bookingRoutes);
 app.use(staticRoutes);
 
-// 404 Not Found Handler (for undefined routes)
+// 404 handler
 app.use((req, res) => {
   res.status(404).send(`
     <h2>404 - Page Not Found</h2>
-    <p>The page you are looking for doesn't exist.</p>
+    <p>This page doesn't exist.</p>
     <a href="/">Go to Home</a>
   `);
 });
 
-// General Error Handler
+// Error handler
 app.use((err, req, res, next) => {
-  console.error('Internal server error:', err);
+  console.error('Internal error:', err);
   res.status(500).send(`
-    <h2>500 - Internal Server Error</h2>
+    <h2>500 - Server Error</h2>
     <p>Something went wrong.</p>
     <a href="/">Go to Home</a>
   `);
 });
-// const session = require('express-session');
-const MongoStore = require('connect-mongo');
-
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI, // your MongoDB connection string
-  })
-}));
-
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
