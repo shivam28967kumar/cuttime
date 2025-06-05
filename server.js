@@ -39,11 +39,7 @@ app.get('/', (req, res) => {
 // Middleware
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-  secret: 'cuttime_secret_key',
-  resave: false,
-  saveUninitialized: true
-}));
+
 
 app.post('/contact', async (req, res) => {
   const { name, email, message } = req.body;
