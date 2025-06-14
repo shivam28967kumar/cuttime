@@ -37,7 +37,7 @@ router.post('/bookslot', requireLogin, async (req, res) => {
     await newBooking.save();
 
     res.send(`
-      <h2>Booking Saved to MongoDB!</h2>
+      <h2>Booking Saved !</h2>
       <p>Salon: ${salon}</p>
       <p>Date: ${date}</p>
       <p>Time: ${time}</p>
