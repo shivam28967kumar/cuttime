@@ -1,37 +1,26 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const path = require('path');
 const validator = require('validator');
-const { safeReadJSON, safeWriteJSON } = require('../utils/fileHelpers');
+const path = require('path');
+
+const User = require('../models/User');
 const { sendOtpEmail } = require('../utils/mailer');
 
 const router = express.Router();
-
 const otpStore = new Map(); // temp store: email -> { otp, timestamp, data }
 
-// Render register page
-router.get('/register', (req, res) => {
-  res.render('register');
-});
-
-router.get('/verify', (req, res) => {
-  res.render('verify');
-});
-// Render login page
-router.get('/login', (req, res) => {
-  res.render('login');
-});
-
-// Render other pages
+// GET routes
+router.get('/register', (req, res) => res.render('register'));
+router.get('/verify', (req, res) => res.render('verify'));
+router.get('/login', (req, res) => res.render('login'));
 router.get('/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) {
       console.error('Logout error:', err);
       return res.send('<h2>Error logging out.</h2><a href="/dashboard">Back to Dashboard</a>');
     }
-
-    res.clearCookie('connect.sid'); // clear session cookie
-    res.render('logout'); // show logout.ejs page
+    res.clearCookie('connect.sid');
+    res.render('logout');
   });
 });
 router.get('/bookslot', (req, res) => res.render('bookslot'));
@@ -39,7 +28,7 @@ router.get('/home', (req, res) => res.render('home'));
 router.get('/thankyou', (req, res) => res.render('thankyou'));
 router.get('/contact', (req, res) => res.render('contact'));
 
-// Handle registration POST
+// POST /register
 router.post('/register', async (req, res) => {
   try {
     const name = req.body.name?.trim();
@@ -54,30 +43,19 @@ router.post('/register', async (req, res) => {
       return res.status(400).send('<h2>Invalid email format.</h2><a href="/register">Try Again</a>');
     }
 
-    // Read existing users
-    const filePath = path.join(__dirname, '..', 'registrations.json');
-    const registrations = await safeReadJSON(filePath);
-
-    // Check if user already exists
-    if (registrations.find(u => u.email === email)) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return res.status(400).send('<h2>Email already registered.</h2><a href="/register">Try Again</a>');
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Store OTP & user data temporarily
     otpStore.set(email, {
       otp,
       timestamp: Date.now(),
       data: { name, email, password: hashedPassword, verified: true }
     });
-
-   // console.log(`Sending OTP ${otp} to ${email}`);
-   // console.log(`OTP is ${otp}`);
 
     await sendOtpEmail(email, otp);
     res.render('verify', { email });
@@ -88,7 +66,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Verify OTP POST
+// POST /verify-otp
 router.post('/verify-otp', async (req, res) => {
   const { email, otp } = req.body;
 
@@ -109,20 +87,16 @@ router.post('/verify-otp', async (req, res) => {
   }
 
   try {
-    const filePath = path.join(__dirname, '..', 'registrations.json');
-    const registrations = await safeReadJSON(filePath);
-
-    registrations.push(data);
-    await safeWriteJSON(filePath, registrations);
-
+    await User.create(data); // Save to MongoDB
     otpStore.delete(email);
-
     res.send('<h2>Registration Complete! You may now <a href="/login">Login</a>.</h2>');
-  } catch (error) {
-    console.error('Saving user failed:', error);
+  } catch (err) {
+    console.error('MongoDB save error:', err);
     res.status(500).send('<h2>Failed to save user.</h2><a href="/register">Try Again</a>');
   }
 });
+
+// POST /resend-otp
 router.post('/resend-otp', async (req, res) => {
   const { email } = req.body;
   const stored = otpStore.get(email);
@@ -135,7 +109,7 @@ router.post('/resend-otp', async (req, res) => {
   otpStore.set(email, {
     ...stored,
     otp: newOtp,
-    timestamp: Date.now(),
+    timestamp: Date.now()
   });
 
   try {
@@ -147,21 +121,13 @@ router.post('/resend-otp', async (req, res) => {
   }
 });
 
-
-// Login POST
+// POST /login
 router.post('/login', async (req, res) => {
   try {
     const email = req.body.email?.trim().toLowerCase();
     const password = req.body.password;
 
-    if (!email || !password) {
-      return res.status(400).send('<h2>Email and password are required.</h2><a href="/login">Try Again</a>');
-    }
-
-    const filePath = path.join(__dirname, '..', 'registrations.json');
-    const registrations = await safeReadJSON(filePath);
-
-    const user = registrations.find(u => u.email === email);
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).send('<h2>Invalid email or password.</h2><a href="/login">Try Again</a>');
     }
@@ -175,7 +141,6 @@ router.post('/login', async (req, res) => {
       return res.status(403).send('<h2>Please verify your email first.</h2><a href="/login">Back to Login</a>');
     }
 
-    // Save user session
     req.session.user = { name: user.name, email: user.email };
 
     res.send(`
