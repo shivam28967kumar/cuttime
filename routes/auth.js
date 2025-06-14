@@ -140,8 +140,11 @@ router.post('/login', async (req, res) => {
     if (!user.verified) {
       return res.status(403).send('<h2>Please verify your email first.</h2><a href="/login">Back to Login</a>');
     }
-
-    req.session.user = { name: user.name, email: user.email };
+req.session.user = {
+  _id: user._id,           // <-- this is what MongoDB needs
+  name: user.name,
+  email: user.email
+};
 
     res.send(`
       <h2>Login Successful!</h2>
