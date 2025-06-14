@@ -86,7 +86,6 @@ app.use(authRoutes);
 app.use(dashboardRoutes.router); // if exported with `{ router }`
 app.use(bookingRoutes);
 app.use(staticRoutes);
-const bookingRoutes = require('./routes/booking');
 app.use('/api', bookingRoutes);
 // 404 handler
 app.use((req, res) => {
