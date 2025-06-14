@@ -62,8 +62,11 @@ router.get('/bookings', requireLogin, async (req, res) => {
       `<li>Booking ${i + 1}: ${b.salonName}, ${b.date}, ${b.timeSlot} 
       - <a href="/cancelbooking?id=${b._id}">Cancel</a></li>`
     ).join('');
-
-    res.send(<h2>Your MongoDB Bookings</h2><ul>${list}</ul><a href="/home">Back</a>);
+res.send(`
+  <h2>Your MongoDB Bookings</h2>
+  <ul>${list}</ul>
+  <a href="/home">Back</a>
+`);
   } catch (error) {
     console.error('MongoDB View Bookings Error:', error);
     res.status(500).send('<h2>Server error loading bookings.</h2><a href="/home">Back</a>');
