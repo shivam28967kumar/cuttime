@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Bookings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f8f8f8;
+    }
+    h2 {
+      color: #333;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      background: #fff;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .back {
+      margin-top: 2rem;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h2>Your Bookings</h2>
+
+  <% if (bookings.length === 0) { %>
+    <p>No bookings found.</p>
+  <% } else { %>
+    <ul>
+      <% bookings.forEach((b, i) => { %>
+        <li>
+          <strong>Booking <%= i + 1 %></strong><br>
+          Salon: <%= b.salonName %><br>
+          Date: <%= b.date %><br>
+          Time: <%= b.timeSlot %><br>
+          <a href="/cancelbooking?id=<%= b._id %>">Cancel</a>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <a href="/home" class="back">← Back to Home</a>
+</body>
+</html>
