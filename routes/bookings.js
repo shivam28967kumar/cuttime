@@ -44,7 +44,7 @@ router.post('/bookslot', requireLogin, async (req, res) => {
       <a href="/home">Back to Home</a>
     `);
   } catch (error) {
-    console.error('MongoDB Booking Error:', error);
+    console.error(' Booking Error:', error);
     res.status(500).send('<h2>Server error saving booking.</h2><a href="/bookslot">Try Again</a>');
   }
 });
@@ -63,12 +63,12 @@ router.get('/bookings', requireLogin, async (req, res) => {
       - <a href="/cancelbooking?id=${b._id}">Cancel</a></li>`
     ).join('');
 res.send(`
-  <h2>Your MongoDB Bookings</h2>
+  <h2>Your  Bookings</h2>
   <ul>${list}</ul>
   <a href="/home">Back</a>
 `);
   } catch (error) {
-    console.error('MongoDB View Bookings Error:', error);
+    console.error(' View Bookings Error:', error);
     res.status(500).send('<h2>Server error loading bookings.</h2><a href="/home">Back</a>');
   }
 });
@@ -90,7 +90,7 @@ router.get('/cancelbooking', requireLogin, async (req, res) => {
 
     res.send('<h2>Booking cancelled successfully.</h2><a href="/bookings">Back to Bookings</a>');
   } catch (error) {
-    console.error('MongoDB Cancel Booking Error:', error);
+    console.error(' Cancel Booking Error:', error);
     res.status(500).send('<h2>Server error cancelling booking.</h2><a href="/bookings">Back</a>');
   }
 });
