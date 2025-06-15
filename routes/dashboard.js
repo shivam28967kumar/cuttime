@@ -21,7 +21,8 @@ router.get('/dashboard', requireLogin, (req, res) => {
     <h2>Hello, ${name} 👋</h2>
     <p>Your email: ${email}</p>
     <a href="/bookslot">Book a Slot</a> |
-    <a href="/logout">Logout</a>
+    <a href="/logout">Logout</a> |
+    
           <a href="/bookings">View Bookings</a>
 
   `);
